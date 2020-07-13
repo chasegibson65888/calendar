@@ -1,11 +1,11 @@
 var p = MindFusion.Scheduling;
 
-// create a new instance of the calendar 
+
 var calendar = new p.Calendar(document.getElementById("calendar"));
 
 calendar.theme = "peach";
 
-//visualize the calendar
+
 calendar.render();
 
 calendar.itemCreating.addEventListener(handleItemCreating);
@@ -15,26 +15,26 @@ calendar.itemDeleting.addEventListener(handleItemDeleting);
 function handleItemDeleting (sender, args )
 {	
 		args.cancel = true;
-		showWarning("You are not allowed to delete an item");
+		showWarningTimeCount("delete not allow");
 }
 
 function handleItemCreating (sender, args )
 {
-	if(itemOnSunday(args.item) || itemTooLate(args.item))
+	if(itemOnSunday(args.item) || itemTooLateCount(args.item))
 	{
 		args.cancel = true;
-		showWarning("Items cannot include Sunday or take place after 8PM");
+		showWarningTimeCount("don't consider sunday, as well as don't set any event after 8 pm");
 	}
 }
 
 function handleItemModified (sender, args )
 {
-	if(itemOnSunday(args.item) || itemTooLate(args.item))
+	if(itemOnSunday(args.item) || itemTooLateCount(args.item))
 	{
 		args.item.startTime = args.oldItem.startTime;
 		args.item.endTime = args.oldItem.endTime;
 		
-		showWarning("Items cannot include Sunday or take place after 8PM");
+		showWarningTimeCount("cannot include event Sunday or take place after 8PM");
 	}
 }
 
@@ -61,7 +61,7 @@ function itemOnSunday (item)
 }
 
 
-function itemTooLate( item )
+function itemTooLateCount( item )
 {
 	if(item.startTime.hour > 20 || item.endTime.hour > 20)
 		return true;
@@ -69,9 +69,10 @@ function itemTooLate( item )
 	return false;
 }
 
-function showWarning (message_text)
+function showWarningTimeCount (message_text)
 {
 	document.getElementById('alrt').innerHTML=message_text; 
     setTimeout(function() {document.getElementById('alrt').innerHTML='';},5000);
 	
+}
 }
